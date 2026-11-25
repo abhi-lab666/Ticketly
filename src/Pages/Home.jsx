@@ -1,5 +1,10 @@
 
+<<<<<<< Updated upstream
 import { useMemo } from 'react'
+=======
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+>>>>>>> Stashed changes
 import Banner from '../Components/Banner.jsx'
 import Category from '../Components/Category.jsx'
 import EventSection from '../Components/EventSection.jsx'
@@ -39,6 +44,7 @@ const sections = [
   },
 ]
 
+<<<<<<< Updated upstream
 function Home({
   events,
   user,
@@ -52,10 +58,46 @@ function Home({
     return events.filter((event) => {
       const query = searchTerm.trim().toLowerCase()
 
+=======
+function Home({ events, user, onLogout }) {
+  const location = useLocation()
+
+  const [searchTerm, setSearchTerm] = useState(location.state?.search || '')
+  const [selectedCategory, setSelectedCategory] = useState(location.state?.category || '')
+  const [selectedLocation, setSelectedLocation] = useState(location.state?.location || 'Vijayawada')
+
+  useEffect(() => {
+    setSelectedCategory(location.state?.category || '')
+    setSearchTerm(location.state?.search || '')
+    
+    if (location.state?.location) {
+      setSelectedLocation(location.state.location)
+    }
+  }, [location.key])
+
+  const filteredEvents = useMemo(() => {
+    return events.filter((event) => {
+      const query = searchTerm.trim().toLowerCase()
+
+>>>>>>> Stashed changes
       const matchesQuery =
         !query ||
         [event.name, event.category, event.location, event.venue]
           .some((value) => String(value || '').toLowerCase().includes(query))
+<<<<<<< Updated upstream
+=======
+
+      const matchesCategory =
+        !selectedCategory || event.category === selectedCategory
+
+      const matchesLocation =
+        !selectedLocation ||
+        String(event.location || '').toLowerCase() === selectedLocation.toLowerCase()
+
+      return matchesQuery && matchesCategory && matchesLocation
+    })
+  }, [events, searchTerm, selectedCategory, selectedLocation])
+>>>>>>> Stashed changes
 
       const matchesLocation =
         !selectedLocation ||
@@ -69,6 +111,11 @@ function Home({
 
   function clearFilters() { setSearchTerm('') }
 
+  function clearFilters() {
+    setSearchTerm('')
+    setSelectedCategory('')
+  }
+
   return (
     <>
       <Header
@@ -78,6 +125,15 @@ function Home({
         onSearchChange={setSearchTerm}
         selectedLocation={selectedLocation}
         onLocationChange={setSelectedLocation}
+<<<<<<< Updated upstream
+=======
+        selectedCategory={selectedCategory}
+        onCategoryChange={(category) => {
+          setSelectedCategory((current) =>
+            current === category ? '' : category
+          )
+        }}
+>>>>>>> Stashed changes
       />
 
       <main>
@@ -89,7 +145,18 @@ function Home({
         <Banner />
 
         <div className="home-content">
+<<<<<<< Updated upstream
           <Category />
+=======
+          <Category
+            selectedCategory={selectedCategory}
+            onSelect={(category) => {
+              setSelectedCategory((current) =>
+                current === category ? '' : category
+              )
+            }}
+          />
+>>>>>>> Stashed changes
 
           {isFiltering ? (
             <>
@@ -97,7 +164,11 @@ function Home({
                 title={
                   searchTerm
                     ? `Results for "${searchTerm}"`
+<<<<<<< Updated upstream
                     : 'Recommended events'
+=======
+                    : selectedCategory
+>>>>>>> Stashed changes
                 }
                 subtitle={`${filteredEvents.length} EXPERIENCES FOUND`}
                 events={filteredEvents}

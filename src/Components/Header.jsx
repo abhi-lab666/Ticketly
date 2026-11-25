@@ -1,5 +1,9 @@
 
+<<<<<<< Updated upstream
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+=======
+import { Link, useNavigate } from 'react-router-dom'
+>>>>>>> Stashed changes
 import { useState } from 'react'
 import SearchBar from './SearchBar.jsx'
 
@@ -26,6 +30,28 @@ function Header({
   const searchValue = searchTerm === undefined ? localSearch : searchTerm
   const locationValue = selectedLocation === undefined ? localLocation : selectedLocation
 
+<<<<<<< Updated upstream
+=======
+  function changeCategory(category) {
+    if (onCategoryChange) {
+      onCategoryChange(category)
+    } else {
+      navigate('/', { state: { category } })
+    }
+  }
+
+  function goHome() {
+    if (onCategoryChange) onCategoryChange('')
+    if (onSearchChange) onSearchChange('')
+    navigate('/', {
+      state: {
+        category: '',
+        search: '',
+      },
+    })
+  }
+
+>>>>>>> Stashed changes
   function changeSearch(value) {
     if (onSearchChange) {
       onSearchChange(value)
@@ -47,12 +73,13 @@ function Header({
   return (
     <header className="site-header">
       <div className="header-main">
-        <Link className="brand" to="/" aria-label="Ticketly home">
+        <Link className="brand" to="/" aria-label="Ticketly home" onClick={goHome}>
           <img src="/images/logo.png" alt="" />
           <span>TICKETLY</span>
         </Link>
 
         <nav className="desktop-nav" aria-label="Main navigation">
+<<<<<<< Updated upstream
           <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} end to="/">
             Home
           </NavLink>
@@ -62,6 +89,18 @@ function Header({
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
               key={name}
               to={path}
+=======
+          <button className="nav-link" onClick={goHome} type="button">
+            Home
+          </button>
+
+          {categories.map((category) => (
+            <button
+              className={selectedCategory === category ? 'nav-link active' : 'nav-link'}
+              key={category}
+              onClick={() => changeCategory(category)}
+              type="button"
+>>>>>>> Stashed changes
             >
               {name}
             </NavLink>
