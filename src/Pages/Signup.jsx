@@ -5,7 +5,7 @@ import { getStoredAccounts } from '../utils/storage.js'
 
 const initialForm = { name: '', email: '', phone: '', password: '', confirmPassword: '' }
 
-function Signup({ onLogin }) {
+function Signup({ onRegister }) {
   const [form, setForm] = useState(initialForm)
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
@@ -27,14 +27,18 @@ function Signup({ onLogin }) {
 
     const isAdminIdentifier = email === adminCredentials.email.toLowerCase()
     const alreadyRegistered = getStoredAccounts().some((account) =>
-      account.email.toLowerCase() === email || account.phone === phone,
+      account.email?.toLowerCase() === email || account.phone === phone,
     )
     if (isAdminIdentifier) return setErrorMessage('That email is reserved for the configured Admin account.')
     if (alreadyRegistered) return setErrorMessage('That email or phone number is already registered.')
 
     const account = { id: `user-${Date.now()}`, name, email, phone, password: form.password, role: 'User' }
-    onLogin(account, true)
-    navigate('/dashboard', { replace: true, state: { message: `Welcome to Ticketly, ${name}!` } })
+    if (!onRegister(account)) {
+      setErrorMessage('That email or phone number is already registered.')
+      return
+    }
+
+    navigate('/user/login', { replace: true, state: { registrationSuccess: true } })
   }
 
   return (

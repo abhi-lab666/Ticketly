@@ -13,7 +13,15 @@ function createBookingTimestamp() {
   return new Date().toISOString()
 }
 
-function Booking({ events, user, onLogout }) {
+function Booking({
+  events,
+  user,
+  onLogout,
+  searchTerm,
+  setSearchTerm,
+  selectedLocation,
+  setSelectedLocation,
+}) {
   const { id } = useParams()
   const event = events.find((item) => item.id === id)
   const [selectedSeats, setSelectedSeats] = useState([])
@@ -71,7 +79,14 @@ function Booking({ events, user, onLogout }) {
 
   return (
     <>
-      <Header user={user} onLogout={onLogout} />
+      <Header
+        user={user}
+        onLogout={onLogout}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedLocation={selectedLocation}
+        onLocationChange={setSelectedLocation}
+      />
       <main className="booking-page">
         <Link className="back-link" to={`/event/${event.id}`}>← {event.name}</Link>
         {booking ? (

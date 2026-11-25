@@ -4,6 +4,7 @@ import ProtectedRoute from './Components/ProtectedRoute.jsx'
 import AdminDashboard from './Pages/AdminDashboard.jsx'
 import AdminLogin from './Pages/AdminLogin.jsx'
 import Booking from './Pages/Booking.jsx'
+import CategoryPage from './Pages/CategoryPage.jsx'
 import EventDetails from './Pages/EventDetails.jsx'
 import Home from './Pages/Home.jsx'
 import Login from './Pages/Login.jsx'
@@ -19,22 +20,32 @@ import './App.css'
 function App() {
   const [user, setUser] = useState(getCurrentUser)
   const [events, setEvents] = useState(getStoredEvents)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState('Vijayawada')
   const [loginNotice, setLoginNotice] = useState('')
 
   useEffect(() => {
     writeStorage(STORAGE_KEYS.events, events)
   }, [events])
 
-  function handleLogin(account, isNewUser = false) {
-    if (isNewUser) {
-      writeStorage(STORAGE_KEYS.accounts, [...getStoredAccounts(), account])
-    }
+  function handleLogin(account) {
     writeStorage(STORAGE_KEYS.currentUser, account)
     window.localStorage.setItem(STORAGE_KEYS.loggedIn, 'true')
     setUser(account)
-    setLoginNotice(isNewUser
-      ? `Welcome to Ticketly, ${account.name}!`
-      : `Welcome back, ${account.name}!`)
+    setLoginNotice(`Welcome back, ${account.name}!`)
+  }
+
+  function handleRegister(account) {
+    const accounts = getStoredAccounts()
+    const isDuplicate = accounts.some((storedAccount) =>
+      storedAccount.email?.toLowerCase() === account.email.toLowerCase() ||
+      storedAccount.phone === account.phone,
+    )
+
+    if (isDuplicate) return false
+
+    writeStorage(STORAGE_KEYS.accounts, [...accounts, account])
+    return true
   }
 
   function handleLogout() {
@@ -46,7 +57,34 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Home events={events} user={user} onLogout={handleLogout} />} />
+      <Route
+        path="/"
+        element={<Home
+          events={events}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          user={user}
+          onLogout={handleLogout}
+        />}
+      />
+      {['Movies', 'Events', 'Concerts', 'Sports', 'Activities'].map((category) => (
+        <Route
+          key={category}
+          path={`/${category.toLowerCase()}`}
+          element={<CategoryPage
+            category={category}
+            events={events}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            user={user}
+            onLogout={handleLogout}
+          />}
+        />
+      ))}
       <Route
         path="/login"
         element={user
@@ -69,21 +107,56 @@ function App() {
         path="/signup"
         element={user
           ? <Navigate replace to={user.role === 'Admin' ? '/admin' : '/dashboard'} state={{ message: `Welcome back, ${user.name}!` }} />
-          : <Signup onLogin={handleLogin} />}
+          : <Signup onRegister={handleRegister} />}
       />
       <Route path="/register" element={<Navigate replace to="/signup" />} />
-      <Route path="/event/:id" element={<EventDetails events={events} user={user} onLogout={handleLogout} />} />
+      <Route
+        path="/event/:id"
+        element={<EventDetails
+          events={events}
+          user={user}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        />}
+      />
       <Route
         path="/booking/:id"
-        element={<ProtectedRoute user={user} allowedRole="User"><Booking events={events} user={user} onLogout={handleLogout} /></ProtectedRoute>}
+        element={<ProtectedRoute user={user} allowedRole="User"><Booking
+          events={events}
+          user={user}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        /></ProtectedRoute>}
       />
       <Route
         path="/dashboard"
-        element={<ProtectedRoute user={user} allowedRole="User"><UserDashboard user={user} events={events} notice={loginNotice} onLogout={handleLogout} /></ProtectedRoute>}
+        element={<ProtectedRoute user={user} allowedRole="User"><UserDashboard
+          user={user}
+          events={events}
+          notice={loginNotice}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        /></ProtectedRoute>}
       />
       <Route
         path="/tickets"
-        element={<ProtectedRoute user={user} allowedRole="User"><MyTickets user={user} onLogout={handleLogout} /></ProtectedRoute>}
+        element={<ProtectedRoute user={user} allowedRole="User"><MyTickets
+          user={user}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        /></ProtectedRoute>}
       />
       <Route
         path="/admin"

@@ -1,12 +1,24 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getStoredAccounts } from '../utils/storage.js'
 
 function Login({ onLogin }) {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const navigate = useNavigate()
+  const [successMessage] = useState(() =>
+    location.state?.registrationSuccess
+      ? 'Your Ticketly account has been created successfully. Please log in.'
+      : '',
+  )
+
+  useEffect(() => {
+    if (!location.state?.registrationSuccess) return
+
+    navigate(location.pathname, { replace: true, state: null })
+  }, [location.key, location.pathname, location.state, navigate])
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -36,6 +48,7 @@ function Login({ onLogin }) {
         <p className="eyebrow">WELCOME BACK</p>
         <h1>Good to see you.</h1>
         <p className="auth-description">Sign in to pick up where the good times left off.</p>
+        {successMessage && <p className="success-message registration-message" role="status">{successMessage}</p>}
         <form className="form-stack" onSubmit={handleSubmit}>
           <label>Email or phone number
             <input autoComplete="username" onChange={(event) => setIdentifier(event.target.value)} required value={identifier} />

@@ -3,14 +3,29 @@ import Footer from '../Components/Footer.jsx'
 import Header from '../Components/Header.jsx'
 import { formatPrice } from '../utils/storage.js'
 
-function EventDetails({ events, user, onLogout }) {
+function EventDetails({
+  events,
+  user,
+  onLogout,
+  searchTerm,
+  setSearchTerm,
+  selectedLocation,
+  setSelectedLocation,
+}) {
   const { id } = useParams()
   const event = events.find((item) => item.id === id)
   if (!event) return <main className="empty-page"><h1>We couldn't find that event.</h1><Link className="button button-primary" to="/">Explore events</Link></main>
 
   return (
     <>
-      <Header user={user} onLogout={onLogout} />
+      <Header
+        user={user}
+        onLogout={onLogout}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedLocation={selectedLocation}
+        onLocationChange={setSelectedLocation}
+      />
       <main className="details-page">
         <Link className="back-link" to="/">← Back to explore</Link>
         <div className="details-layout">

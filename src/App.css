@@ -48,6 +48,11 @@ img { display: block; max-width: 100%; }
 .home-intro { max-width: 1252px; margin: 25px auto 13px; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
 .home-intro span, .eyebrow { color: var(--pink-dark); font-size: 10px; font-weight: 850; letter-spacing: .15em; }
 .home-intro strong { color: #667087; font-size: 12px; }
+.category-page { max-width: 1252px; min-height: 65vh; margin: auto; padding: 48px 24px 70px; }
+.category-heading { margin: 0 0 35px; }
+.category-heading .eyebrow { margin: 0 0 9px; }
+.category-heading h1 { margin: 0; color: var(--navy); font-size: clamp(35px, 5vw, 52px); letter-spacing: -.05em; }
+.category-heading > p:last-child { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
 .hero-banner { position: relative; max-width: 1204px; height: clamp(330px, 38vw, 460px); margin: 0 auto; overflow: hidden; border-radius: 17px; background: var(--navy); color: white; }
 .hero-slide { position: absolute; inset: 0; display: flex; align-items: center; padding: 50px 7%; background-position: center; background-size: cover; opacity: 0; transition: opacity .65s ease; }
 .hero-slide.active { opacity: 1; }
@@ -210,6 +215,7 @@ img { display: block; max-width: 100%; }
 .dashboard-welcome h1 { margin: 4px 0; color: var(--navy); font-size: clamp(28px,4vw,40px); letter-spacing: -.04em; }
 .dashboard-welcome p:not(.eyebrow) { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
 .success-message { padding: 12px 15px; border: 1px solid #bde8cc; border-radius: 8px; background: #f0fff4; color: #237b44; font-size: 12px; }
+.registration-message { margin: 0 0 16px; }
 .dashboard-columns { display: grid; grid-template-columns: 265px 1fr; align-items: start; gap: 19px; }
 .dashboard-panel { margin-bottom: 17px; }
 .profile-panel { text-align: center; }
@@ -314,6 +320,7 @@ tr:last-child td { border-bottom: 0; }
   .event-card-bottom .button { min-height: 30px; padding: 0 8px; font-size: 9px; }
   .site-footer { align-items: flex-start; flex-direction: column; gap: 7px; padding: 19px 16px; }
   .details-page, .booking-page, .dashboard-page { padding: 24px 16px 45px; }
+  .category-page { padding: 32px 16px 45px; }
   .details-layout { grid-template-columns: 1fr; gap: 25px; }
   .details-image, .details-image img { min-height: 0; height: min(72vw, 360px); }
   .booking-layout { grid-template-columns: 1fr; }

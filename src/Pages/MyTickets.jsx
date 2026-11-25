@@ -3,7 +3,14 @@ import Footer from '../Components/Footer.jsx'
 import Header from '../Components/Header.jsx'
 import { formatPrice, getStoredBookings } from '../utils/storage.js'
 
-function MyTickets({ user, onLogout }) {
+function MyTickets({
+  user,
+  onLogout,
+  searchTerm,
+  setSearchTerm,
+  selectedLocation,
+  setSelectedLocation,
+}) {
   const bookings = getStoredBookings()
     .filter((booking) => booking.userId === user.id)
     .slice()
@@ -11,7 +18,14 @@ function MyTickets({ user, onLogout }) {
 
   return (
     <>
-      <Header user={user} onLogout={onLogout} />
+      <Header
+        user={user}
+        onLogout={onLogout}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedLocation={selectedLocation}
+        onLocationChange={setSelectedLocation}
+      />
       <main className="dashboard-page">
         <Link className="back-link" to="/dashboard">← Your dashboard</Link>
         <div className="dashboard-welcome"><div><p className="eyebrow">READY WHEN YOU ARE</p><h1>My tickets</h1><p>Your booked experiences, all in one place.</p></div></div>

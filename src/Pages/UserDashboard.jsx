@@ -5,7 +5,16 @@ import Footer from '../Components/Footer.jsx'
 import Header from '../Components/Header.jsx'
 import { formatPrice, getStoredBookings, readStorage, STORAGE_KEYS, writeStorage } from '../utils/storage.js'
 
-function UserDashboard({ user, events, notice, onLogout }) {
+function UserDashboard({
+  user,
+  events,
+  notice,
+  onLogout,
+  searchTerm,
+  setSearchTerm,
+  selectedLocation,
+  setSelectedLocation,
+}) {
   const location = useLocation()
   const [favorites, setFavorites] = useState(() => readStorage(STORAGE_KEYS.favorites, {}))
   const userBookings = useMemo(
@@ -29,7 +38,14 @@ function UserDashboard({ user, events, notice, onLogout }) {
 
   return (
     <>
-      <Header user={user} onLogout={onLogout} />
+      <Header
+        user={user}
+        onLogout={onLogout}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedLocation={selectedLocation}
+        onLocationChange={setSelectedLocation}
+      />
       <main className="dashboard-page">
         <div className="dashboard-welcome">
           <div>
